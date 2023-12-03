@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Database - Constructor Standings 2023</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Add any additional styles you may need */
+        canvas {
+            max-width: 800px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>F1 Database - Constructor Standings 2023</h1>
+
+<canvas id="constructorStandingsChart" width="800" height="400"></canvas>
+
+<script>
+    fetch('/constructorStandings2023')
+        .then(response => response.json())
+        .then(data => {
+            const constructorStandingsData = data;
+
+            const labels = constructorStandingsData.map(item => item.ConstructorName);
+            const points = constructorStandingsData.map(item => item.TotalPoints);
+
+            const chartConfig = {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Constructor Standings 2023',
+                        data: points,
+                        backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            const constructorStandingsChartCanvas = document.getElementById('constructorStandingsChart');
+            const constructorStandingsChartContext = constructorStandingsChartCanvas.getContext('2d');
+            const constructorStandingsChart = new Chart(constructorStandingsChartContext, chartConfig);
+        })
+        .catch(error => console.error('Error fetching constructor standings data: ', error));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Database</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Style for the autocomplete results container */
+        .autocomplete-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Style for the autocomplete results */
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 99;
+            width: 100%;
+            background-color: #fff;
+        }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+<body>
+
+<h1>F1 Driver Database</h1>
+<form id="driverForm">
+    <!-- Add a container for autocomplete -->
+    <div class="autocomplete-container">
+        <label for="driverName">Driver Name:</label>
+        <input type="text" id="driverName" name="driverName" autocomplete="off" required>
+        <!-- Autocomplete results will be displayed here -->
+        <div id="autocompleteResults" class="autocomplete-items"></div>
+    </div>
+
+    <label for="year">Year:</label>
+    <input type="number" id="year" name="year" required>
+    
+    <button type="submit">Search</button>
+</form>
+<h2 id="queryName"></h2>
+    <!-- Use a unique ID for this table -->
+    <table id="resultTable"></table>
+<script>
+    const driverForm = document.getElementById('driverForm');
+    const driverNameInput = document.getElementById('driverName');
+    const autocompleteResults = document.getElementById('autocompleteResults');
+
+    driverNameInput.addEventListener('input', function () {
+        const searchTerm = driverNameInput.value.trim();
+
+        if (searchTerm.length > 2) {
+            fetch(`/getDrivers?query=${searchTerm}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Display the autocomplete results
+                    autocompleteResults.innerHTML = '';
+                    data.forEach(driver => {
+                        const resultItem = document.createElement('div');
+                        resultItem.textContent = `${driver.forename} ${driver.surname}`;
+                        resultItem.addEventListener('click', function () {
+                            // Set the selected driver name in the input field
+                            driverNameInput.value = `${driver.forename} ${driver.surname}`;
+                            // Clear the autocomplete results
+                            autocompleteResults.innerHTML = '';
+                        });
+                        autocompleteResults.appendChild(resultItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching driver names: ', error));
+        } else {
+            // Clear the autocomplete results when the input is too short
+            autocompleteResults.innerHTML = '';
+        }
+    });
+
+    driverForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        // Call the fetchData function with the appropriate endpoint and queryName
+        fetchData('/driverData', 'Driver Data');
+    });
+
+    function fetchData(endpoint, queryName) {
+        // Your fetchData function implementation
+        const driverName = document.getElementById('driverName').value.trim();
+        const year = document.getElementById('year').value.trim();
+
+        fetch(`${endpoint}?driverName=${driverName}&year=${year}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultTable = document.getElementById('resultTable');
+                resultTable.innerHTML = '';
+
+                const tableHeader = document.createElement('tr');
+                for (const key in data[0]) {
+                    const th = document.createElement('th');
+                    th.textContent = key;
+                    tableHeader.appendChild(th);
+                }
+                resultTable.appendChild(tableHeader);
+
+                data.forEach(item => {
+                    const tableRow = document.createElement('tr');
+                    for (const key in item) {
+                        const td = document.createElement('td');
+                        td.textContent = item[key];
+                        tableRow.appendChild(td);
+                    }
+                    resultTable.appendChild(tableRow);
+                });
+                const queryNameElement = document.getElementById('queryName');
+                queryNameElement.textContent = `Results for: ${queryName}`;
+            })
+            .catch(error => console.error('Error fetching data: ', error));
+    }
+
+</script>
+
+</body>
+</html>

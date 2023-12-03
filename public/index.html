@@ -25,14 +25,17 @@
 <body>
 
   <h1>F1 Database Queries</h1>
-
-  <button onclick="fetchData('/races')">Query 1: Get All Data</button>
-  <button onclick="fetchData('/query2','Top Drivers')">Query 2: Your Query Description</button>
-  <button onclick="fetchData('/query3', '2023 Standings')">Query 3: Another Query</button>
-  <button onclick="fetchData('/query4', 'Highest Points Scored in a Single Season')">Query 4: Yet Another Query</button>
-  <button onclick="fetchData('/query5', 'Top 20 drivers with highest podiums')">Query 5: One More Query</button>
-  <button onclick="fetchData('/query6','Higest Average points in any season')">Query 6: Almost There</button>
-  <button onclick="fetchData('/query7', 'Highest Win Percentage')">Query 7: The Final Query</button>
+  
+  <button onclick="fetchData('/races')">Query 1</button>
+  <button onclick="fetchData('/query2','Top Drivers')">Query 2: Top Drivers</button>
+  <button onclick="fetchData('/query3', '2023 Race Results')">Query 3: 2023 Results</button>
+  <button onclick="fetchData('/query4', 'Highest Points Scored in a Single Season')">Query 4: Highest Points Scored</button>
+  <button onclick="fetchData('/query5', 'Top 20 drivers with highest podiums')">Query 5: Highest podiums</button>
+  <button onclick="fetchData('/query6','Higest Average points in any season')">Query 6: highest avg Points</button>
+  <button onclick="fetchData('/query7', 'Highest Win Percentage')">Query 7: Highest Win percentage</button>
+  <a href="drivers.html" class="button">View Driver Results</a>
+  <a href="graphs.html" class="button">View 2023 Driver Championship</a>
+  <a href="graph2.html" class="button">View 2023 Constructor Championship</a>
 
   <h2 id="queryName"></h2>
   <table id="resultTable">
@@ -44,9 +47,8 @@
         .then(response => response.json())
         .then(data => {
           const resultTable = document.getElementById('resultTable');
-          resultTable.innerHTML = ''; // Clear table
+          resultTable.innerHTML = ''; 
 
-          // Create table header
           const tableHeader = document.createElement('tr');
           for (const key in data[0]) {
             const th = document.createElement('th');
@@ -55,7 +57,6 @@
           }
           resultTable.appendChild(tableHeader);
 
-          // Populate table with data
           data.forEach(item => {
             const tableRow = document.createElement('tr');
             for (const key in item) {

@@ -12,12 +12,22 @@ const connection = mysql.createConnection({
   database: 'f1_database',
 });
 
+function executeQuery(query, res, params) {
+  connection.query(query, params, (error, results) => {
+    if (error) {
+      console.error('Error executing query: ', error);
+      res.status(500).send('Internal Server Error');
+    } else {
+      res.json(results);
+    }
+  });
+}
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  });
+});
 
-  
 connection.connect((err) => {
   if (err) {
     console.error('Error connecting to MySQL: ', err);
@@ -25,7 +35,6 @@ connection.connect((err) => {
     console.log('Connected to MySQL');
   }
 });
-
 
 app.get('/races', (req, res) => {
 
@@ -222,10 +231,115 @@ app.get('/query7', (req, res) => {
 });
 
 app.get('/getDrivers', (req, res) => {
-    const query = 'SELECT driverId, forename, surname FROM drivers';
-    executeQuery(query, res);
-  });
+  const query = 'SELECT forename, surname FROM drivers WHERE CONCAT(forename, " ", surname) LIKE ?';
+  const searchTerm = `%${req.query.query}%`;
 
+  connection.query(query, [searchTerm], (error, results) => {
+    if (error) {
+      console.error('Error executing query: ', error);
+      res.status(500).send('Internal Server Error');
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.get('/driverData', (req, res) => {
+  const driverName = req.query.driverName; 
+  const surname = driverName.split(' ')[1];
+  const forename = driverName.split(' ')[0];
+
+  const querys = `
+  SELECT
+  d.forename AS DriverForename,
+  d.surname AS DriverSurname,
+  r.position AS Position,
+  ra.name AS RaceName
+FROM
+  drivers d
+JOIN
+  results r ON d.driverId = r.driverId
+JOIN
+  races ra ON r.raceId = ra.raceId
+WHERE
+  d.driverId = (SELECT driverId
+                FROM drivers
+                WHERE forename = ? AND surname = ?)
+  AND ra.year = ?
+GROUP BY
+  d.driverId, d.forename, d.surname,r.resultId;
+
+  `;
+    
+  connection.query(querys, [forename,surname, req.query.year], (error, results) => {
+    if (error) {
+      console.error('Error executing query: ', error);
+      res.status(500).send('Internal Server Error');
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.get('/driverStandings2023', (req, res) => {
+  // Your query to get driver standings data for 2023
+  const query = `
+    SELECT
+      d.forename AS DriverForename,
+      d.surname AS DriverSurname,
+      SUM(r.points) AS TotalPoints
+    FROM
+      drivers d
+    JOIN
+      results r ON d.driverId = r.driverId
+    JOIN
+      races ra ON r.raceId = ra.raceId
+    WHERE
+      ra.year = 2023
+    GROUP BY
+      d.driverId
+    ORDER BY
+      TotalPoints DESC;
+  `;
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error('Error executing query: ', error);
+      res.status(500).send('Internal Server Error');
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.get('/constructorStandings2023', (req, res) => {
+  const query = `
+    SELECT
+      co.name AS ConstructorName,
+      SUM(r.points) AS TotalPoints
+    FROM
+      constructors co
+    JOIN
+      results r ON co.constructorId = r.constructorId
+    JOIN
+      races ra ON r.raceId = ra.raceId
+    WHERE
+      ra.year = 2023
+    GROUP BY
+      co.constructorId
+    ORDER BY
+      TotalPoints DESC;
+  `;
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error('Error executing query: ', error);
+      res.status(500).send('Internal Server Error');
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 app.listen(port, () => {
   console.log(`Server listening on port http://localhost:${port}`);

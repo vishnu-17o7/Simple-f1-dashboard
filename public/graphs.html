@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Database - Driver Standings 2023</title>
+    <!-- Include Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Add any additional styles you may need */
+        canvas {
+            max-width: 800px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>F1 Database - Driver Standings 2023</h1>
+
+<!-- Create a canvas element for the chart -->
+<canvas id="driverStandingsChart" width="800" height="400"></canvas>
+
+<script>
+    // Mock data for testing, replace it with your actual data
+    fetch('/driverStandings2023')
+        .then(response => response.json())
+        .then(data => {
+            const driverStandingsData = data;
+
+            const labels = driverStandingsData.map(item => `${item.DriverForename} ${item.DriverSurname}`);
+            const points = driverStandingsData.map(item => item.TotalPoints);
+
+            // Chart.js configuration
+            const chartConfig = {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Driver Standings 2023',
+                        data: points,
+                        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            // Render the chart
+            const driverStandingsChartCanvas = document.getElementById('driverStandingsChart');
+            const driverStandingsChartContext = driverStandingsChartCanvas.getContext('2d');
+            const driverStandingsChart = new Chart(driverStandingsChartContext, chartConfig);
+        })
+        .catch(error => console.error('Error fetching driver standings data: ', error));
+</script>
+
+</body>
+</html>
