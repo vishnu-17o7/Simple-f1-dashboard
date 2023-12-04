@@ -4,55 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F1 Database</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
+    <link rel="stylesheet" href="test.css">
+    <link rel="icon" type="image/x-icon" href="f1_logo.svg">
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        /* Style for the autocomplete results container */
-        .autocomplete-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Style for the autocomplete results */
-        .autocomplete-items {
-            position: absolute;
-            border: 1px solid #d4d4d4;
-            max-height: 150px;
-            overflow-y: auto;
-            z-index: 99;
-            width: 100%;
-            background-color: #fff;
-        }
-
-        .autocomplete-items div {
-            padding: 10px;
-            cursor: pointer;
-            background-color: #fff;
-            border-bottom: 1px solid #d4d4d4;
-        }
-
-        .autocomplete-items div:hover {
-            background-color: #e9e9e9;
-        }
-    </style>
 </head>
 <body>
-
+<div class="header">
+    <img src="f1_logo.svg" alt="F1 Logo" class="logo">
 <h1>F1 Driver Database</h1>
+</div>
 <form id="driverForm">
     <!-- Add a container for autocomplete -->
     <div class="autocomplete-container">

@@ -1,42 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>F1 Database</title>
-  <style>
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-  </style>
+  <link rel="stylesheet" href="test.css">
+  <link rel="icon" type="image/x-icon" href="f1_logo.svg">
 </head>
+
 <body>
 
-  <h1>F1 Database Queries</h1>
-  
-  <button onclick="fetchData('/races')">Query 1</button>
-  <button onclick="fetchData('/query2','Top Drivers')">Query 2: Top Drivers</button>
-  <button onclick="fetchData('/query3', '2023 Race Results')">Query 3: 2023 Results</button>
-  <button onclick="fetchData('/query4', 'Highest Points Scored in a Single Season')">Query 4: Highest Points Scored</button>
-  <button onclick="fetchData('/query5', 'Top 20 drivers with highest podiums')">Query 5: Highest podiums</button>
-  <button onclick="fetchData('/query6','Higest Average points in any season')">Query 6: highest avg Points</button>
-  <button onclick="fetchData('/query7', 'Highest Win Percentage')">Query 7: Highest Win percentage</button>
-  <a href="drivers.html" class="button">View Driver Results</a>
-  <a href="graphs.html" class="button">View 2023 Driver Championship</a>
-  <a href="graph2.html" class="button">View 2023 Constructor Championship</a>
+  <div class="header">
+    <img src="f1_logo.svg" alt="F1 Logo" class="logo">
+    <h1>F1 Database Queries</h1>
+  </div>
 
+
+  <div class="container">
+
+    <div class="button-set1">
+      <div class="button-container">
+        <button onclick="fetchData('/races')">Query 1</button>
+      </div>
+      <div class="button-container">
+        <button onclick="fetchData('/query2','Top Drivers')">Query 2: Top Drivers</button>
+      </div>
+      <div class="button-container">
+        <button onclick="fetchData('/query3', '2023 Race Results')">Query 3: 2023 Results</button>
+      </div>
+      <div class="button-container">
+        <button onclick="fetchData('/query4', 'Highest Points Scored in a Single Season')">Query 4: Highest Points
+          Scored</button>
+      </div>
+      <div class="button-container">
+        <button onclick="fetchData('/query5', 'Top 20 drivers with highest podiums')">Query 5: Highest
+          podiums</button>
+      </div>
+    </div>
+    <div class="button-set2">
+      <div class="button-container">
+        <button onclick="fetchData('/query6','Higest Average points in any season')">Query 6: highest avg
+          Points</button>
+      </div>
+      <div class="button-container">
+        <button onclick="fetchData('/query7', 'Highest Win Percentage')">Query 7: Highest Win percentage</button>
+      </div>
+      <div class="button-container">
+        <button class="button" onclick="location.href='drivers.html'">View Driver Results</button>
+      </div>
+
+      <div class="button-container">
+        <button class="button" onclick="location.href='graphs.html'">View 2023 Driver Championship</button>
+      </div>
+
+      <div class="button-container">
+        <button class="button" onclick="location.href='graph2.html'">View 2023 Constructor Championship</button>
+      </div>
+    </div>
+  </div>
   <h2 id="queryName"></h2>
   <table id="resultTable">
   </table>
@@ -47,7 +69,7 @@
         .then(response => response.json())
         .then(data => {
           const resultTable = document.getElementById('resultTable');
-          resultTable.innerHTML = ''; 
+          resultTable.innerHTML = '';
 
           const tableHeader = document.createElement('tr');
           for (const key in data[0]) {
@@ -74,4 +96,5 @@
   </script>
 
 </body>
+
 </html>
