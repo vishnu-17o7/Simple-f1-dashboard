@@ -15,11 +15,9 @@
 </div>
 <div class="inputDrivers">
 <form id="driverForm">
-    <!-- Add a container for autocomplete -->
     <div class="autocomplete-container">
         <label for="driverName">Driver Name:</label>
         <input type="text" id="driverName" name="driverName" autocomplete="off" required>
-        <!-- Autocomplete results will be displayed here -->
         <div id="autocompleteResults" class="autocomplete-items"></div>
     </div>
 
@@ -30,7 +28,6 @@
     </div>
 </form>
 <h2 id="queryName"></h2>
-    <!-- Use a unique ID for this table -->
     <table id="resultTable"></table>
 <script>
     const driverForm = document.getElementById('driverForm');
@@ -60,14 +57,12 @@
                 })
                 .catch(error => console.error('Error fetching driver names: ', error));
         } else {
-            // Clear the autocomplete results when the input is too short
             autocompleteResults.innerHTML = '';
         }
     });
 
     driverForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        // Call the fetchData function with the appropriate endpoint and queryName
         fetchData('/driverData', 'Driver Data');
     });
 

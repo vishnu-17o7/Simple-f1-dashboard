@@ -103,13 +103,11 @@ th {
     margin-left: 10px;
 }
 
-        /* Style for the autocomplete results container */
         .autocomplete-container {
             position: relative;
             display: inline-block;
         }
 
-        /* Style for the autocomplete results */
         .autocomplete-items {
             position: absolute;
             border: 1px solid #d4d4d4;
@@ -149,7 +147,7 @@ th {
 }
 
 .logo {
-    max-width: 150px; /* Adjust the maximum width as needed */
+    max-width: 150px; 
     height: auto;
     padding-bottom: 20px;
 }

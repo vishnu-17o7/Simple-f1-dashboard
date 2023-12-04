@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F1 Database - Driver Standings 2023</title>
-    <!-- Include Chart.js from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Add any additional styles you may need */
         canvas {
             max-width: 800px;
             max-height: 400px;
@@ -30,7 +28,6 @@
 </div>
 
 <script>
-    // Mock data for testing, replace it with your actual data
     fetch('/driverStandings2023')
         .then(response => response.json())
         .then(data => {
@@ -61,7 +58,6 @@
                 }
             };
 
-            // Render the chart
             const driverStandingsChartCanvas = document.getElementById('driverStandingsChart');
             const driverStandingsChartContext = driverStandingsChartCanvas.getContext('2d');
             const driverStandingsChart = new Chart(driverStandingsChartContext, chartConfig);
